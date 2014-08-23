@@ -17,7 +17,7 @@ public class PlayerScript : MonoBehaviour {
 	void Start () {
 
 		GravityVec.x = 0.0f;
-		GravityVec.y = -0.2f;
+		GravityVec.y = -0.00f;
 	
 	}
 	
@@ -26,7 +26,7 @@ public class PlayerScript : MonoBehaviour {
 	{
 
 	}
-
+	
 	void FixedUpdate()
 	{
 		float moveHorizontal = Input.GetAxis ("Horizontal");
@@ -34,11 +34,13 @@ public class PlayerScript : MonoBehaviour {
 
 		rigidbody2D.velocity += GravityVec;
 
-		//gameObject.transform.Rotate(0.0f,0.0f,-3.0f*moveHorizontal);
+		Vector3 direction = new Vector3 (0.0f, 1.0f, 0.0f);
+
+		direction = rigidbody2D.transform.rotation * Vector3.right;
 
 		rigidbody2D.angularVelocity -= moveHorizontal;
 
-		Vector2 movement = new Vector2 (0.0f, moveVertical);
-		rigidbody2D.velocity += movement * Speed;
+		Vector2 direction2d = new Vector2(direction.x, direction.y);
+		rigidbody2D.velocity += direction2d * moveVertical * Speed;
 	}
 }
