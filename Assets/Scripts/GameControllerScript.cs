@@ -2,12 +2,27 @@
 using System.Collections;
 
 public class GameControllerScript : MonoBehaviour {
+	
+	public GameObject AsteroidPrefab;
 
-	// Use this for initialization
-	void Start () {
-	
+    void Start() {
+		GameObject asteroidContainer = new GameObject ("Asteroids");
+
+		int gridX = 9;
+		int gridY = 6;
+		float spacing = 15.0f;
+		Vector3 gridOrigin = new Vector3 (0f, 40f, 0.0f);
+		for (int y = 0; y < gridY; y++) {
+			for (int x = 0; x < gridX; x++) {
+				Vector3 pos = gridOrigin // grid offset
+					+ new Vector3 (x, y, 0.0f) * spacing // strict grid
+						+ new Vector3 (Random.Range (-0.3f, 0.3f), Random.Range (-0.3f, 0.3f), 0.0f) * spacing; // random offset
+				GameObject aNewObject = (GameObject)Instantiate (AsteroidPrefab, pos, Quaternion.identity);
+				aNewObject.transform.parent = asteroidContainer.transform;
+			}
+		}
 	}
-	
+
 	// Update is called once per frame
 	void Update () {
 	

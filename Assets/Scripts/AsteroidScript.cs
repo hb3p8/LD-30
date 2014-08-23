@@ -43,7 +43,7 @@ public class AsteroidScript : MonoBehaviour {
 		float[] arr = new float[power + 1];
 		heights = new List<float>(arr);
 		
-		float displace = Height - 1.5f;
+		float displace = Height - 1.0f;
 		// Set the initial left point
 		heights[0] = UnityEngine.Random.Range (-displace, displace);
 		// set the initial right point
@@ -97,8 +97,10 @@ public class AsteroidScript : MonoBehaviour {
 			List<Vector2> colliderPoints = new List<Vector2> ();
 			
 			for (int x = 0; x < power; x++) {
-				colliderPoints.Add (new Vector2 (x, heights [x] + Height));
+				colliderPoints.Add (fromPolar (new Vector2(Mathf.Max (Height + heights[x], 0.5f), x * step)));
+				//colliderPoints.Add (new Vector2 (x, heights [x] + Height));
 			}
+			colliderPoints.Add (colliderPoints[0]);
 			
 			EdgeCollider2D collider = GetComponent<EdgeCollider2D> ();
 			collider.points = colliderPoints.ToArray ();
