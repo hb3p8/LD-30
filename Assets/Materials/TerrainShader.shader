@@ -6,9 +6,7 @@
        Pass {
            Lighting Off
            ColorMaterial AmbientAndDiffuse
-           SetTexture [_MainTex] {
-              combine texture * primary DOUBLE
-           }
+
        }
     }
 	FallBack "Diffuse"
