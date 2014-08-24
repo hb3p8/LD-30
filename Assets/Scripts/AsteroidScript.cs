@@ -98,11 +98,9 @@ public class AsteroidScript : MonoBehaviour {
 			
 			for (int x = 0; x < power; x++) {
 				colliderPoints.Add (fromPolar (new Vector2(Mathf.Max (Height + heights[x], 0.5f), x * step)));
-				//colliderPoints.Add (new Vector2 (x, heights [x] + Height));
 			}
-			colliderPoints.Add (colliderPoints[0]);
-			
-			EdgeCollider2D collider = GetComponent<EdgeCollider2D> ();
+
+			PolygonCollider2D collider = GetComponent<PolygonCollider2D> ();
 			collider.points = colliderPoints.ToArray ();
 		}
 	}

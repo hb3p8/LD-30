@@ -33,5 +33,8 @@ public class GameControllerScript : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 	
+		//GameObject cameraObject = GameObject.Find("MainCamera");
+		//Camera camera = (Camera)cameraObject.GetComponent<Camera> ();
+//		camera.backgroundColor = Color (1.0f, 0.0f, 0.0f); 
 	}
 }
