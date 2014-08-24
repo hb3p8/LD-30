@@ -24,9 +24,9 @@ public class GameControllerScript : MonoBehaviour {
     void Start() {
 		GameObject asteroidContainer = new GameObject ("Asteroids");
 
-		int gridX = 9;
+		int gridX = 7;
 		int gridY = 6;
-		float spacing = 15.0f;
+		float spacing = 20.0f;
 		Vector3 gridOrigin = new Vector3 (0f, 80f, 0.0f);
 		for (int y = 0; y < gridY; y++) {
 			for (int x = 0; x < gridX; x++) {

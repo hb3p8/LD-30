@@ -22,6 +22,8 @@ public class PlayerScript : MonoBehaviour {
 	private float lastAngularVelocity;
 	private Vector2 lastVeclocity;
 
+	private GameObject playerTurret;
+
 	// Use this for initialization
 	void Start () {
 
@@ -46,12 +48,27 @@ public class PlayerScript : MonoBehaviour {
  		lastVeclocity.x = 0.0f;
  		lastVeclocity.y = 0.0f;
 
+		playerTurret = GameObject.Find ("turret");
 	}
 	
 	// Update is called once per frame
 	void Update ()
 	{
 
+		//Vector3 mousePos = Input.mousePosition;
+		Ray ray = Camera.main.ScreenPointToRay (Input.mousePosition);
+		Vector3 mousePos = ray.origin;
+		Vector3 currentPos = playerTurret.transform.position;//new Vector3 (Screen.width / 2, Screen.height / 2);
+		//Debug.Log (mousePos.x);
+		//Debug.Log (currentPos.x);
+		//Debug.Log ("--------------------");
+
+		float x = currentPos.x - mousePos.x;
+		float y = currentPos.y - mousePos.y;
+		float radians = Mathf.Atan2 (y, x);
+		radians += Mathf.PI / 2f;
+		
+		playerTurret.transform.rotation = Quaternion.AngleAxis (radians / Mathf.PI * 180f, new Vector3 (0f, 0f, 1f));
 	}
 	
 	void FixedUpdate()
