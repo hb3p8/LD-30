@@ -13,11 +13,11 @@ public class PlayerScript : MonoBehaviour {
 	private float MaxAngularVelocity;
 
 	private float VelocityDemping;
-	private float VelocityDempingTreshhold;
+	private float VelocityDempingThreshold;
 	private float VelocityDempingLowSpeed;
 
 	private float AngularVelocityDamping;
-	private float AngularDempingTreshhold;
+	private float AngularDempingThreshold;
 	private float AngularyDempingLowSpeed;
 	// Constants end
 
@@ -33,6 +33,10 @@ public class PlayerScript : MonoBehaviour {
 	private int HP;
 	private int MaxHP = 100;
 
+	private int laserDamage = 5;
+	private float physicalDamage = 8.1f;
+	private float damageMinVelosity = 2.8f;
+
 	private float FireRate;
 	private float lastFireTime;
 
@@ -42,6 +46,10 @@ public class PlayerScript : MonoBehaviour {
 	private float laserShotVelocity = 32.0f;
 	private float fireRate = 0.1f;
 
+	private bool isDead = false;
+	private int crazyC = 30;
+
+	public GameObject explosion;
 	// Use this for initialization
 	void Start () {
 
@@ -53,14 +61,14 @@ public class PlayerScript : MonoBehaviour {
 		
 		MaxVelocity = 14.0f;
 
-		MaxAngularVelocity = 1150.0f;
+		MaxAngularVelocity = 150.0f;
 		
 		VelocityDemping = 0.2f;
-		VelocityDempingTreshhold = 1.5f;
+		VelocityDempingThreshold = 1.5f;
 		VelocityDempingLowSpeed = 0.04f;
 		
 		AngularVelocityDamping = 8.0f;
-		AngularDempingTreshhold = 50.0f;
+		AngularDempingThreshold = 50.0f;
 		AngularyDempingLowSpeed = 0.0255f;
 		
 		lastAngularVelocity = 0.0f;
@@ -81,6 +89,20 @@ public class PlayerScript : MonoBehaviour {
 	// Update is called once per frame
 	void Update ()
 	{
+		if (isDead && crazyC > 0)
+		{
+			Vector3 pos = transform.position;
+			pos.z -= 1.0f;
+			
+			Instantiate(explosion, pos, transform.rotation);
+			crazyC--;
+			return;
+		}
+		else if(isDead)
+		{
+			return;
+		}
+
 		const float halfDist = 300.0f;
 		if (transform.position.y < halfDist)
 		{
@@ -113,21 +135,28 @@ public class PlayerScript : MonoBehaviour {
 		if (Input.GetButton("Fire1") && Time.time > nextFire) 
 		{
 			nextFire = Time.time + fireRate;
-			UnityEngine.Object temp_shot = Instantiate(shot, playerTurret.transform.position,
+
+			Vector3 shotSpawnPos = playerTurret.transform.position;
+			shotSpawnPos.z += 0.05f;
+
+			UnityEngine.Object temp_shot = Instantiate(shot, shotSpawnPos,
 			                                           playerTurret.transform.rotation * (Quaternion.AngleAxis(90.0f, new Vector3(0.0f,0.0f,1.0f))));
 
 			Vector3 turretDirection3 = playerTurret.transform.rotation * Vector3.up;
 			Vector2 turretDirection2 = new Vector2(turretDirection3.x, turretDirection3.y);
 
 			((GameObject)temp_shot).rigidbody2D.velocity = /*rigidbody2D.velocity + */laserShotVelocity*turretDirection2;
-
-			//audio.Play ();
 		}
 
 	}
 	
 	void FixedUpdate()
 	{
+		if (isDead)
+		{
+			return;		
+		}
+
 		float moveHorizontal = Input.GetAxis ("Horizontal");
 		float moveVertical = Input.GetAxis ("Vertical");
 
@@ -182,21 +211,21 @@ public class PlayerScript : MonoBehaviour {
 		//Velocity Damping
 		float velocityMagnitude = rigidbody2D.velocity.magnitude;
 
-		if( velocityMagnitude > VelocityDempingTreshhold )
+		if( velocityMagnitude > VelocityDempingThreshold )
 		{
 			rigidbody2D.velocity -= VelocityDemping * rigidbody2D.velocity.normalized;
 		}
-		else if( velocityMagnitude > 0.0f && velocityMagnitude < VelocityDempingTreshhold )
+		else if( velocityMagnitude > 0.0f && velocityMagnitude < VelocityDempingThreshold )
 		{
 			rigidbody2D.velocity *= 1.0f - VelocityDempingLowSpeed;
 		}
 
 		// AngularVelocity Damping
-		if( Mathf.Abs( rigidbody2D.angularVelocity ) > AngularDempingTreshhold )
+		if( Mathf.Abs( rigidbody2D.angularVelocity ) > AngularDempingThreshold )
 		{
 			rigidbody2D.angularVelocity -= AngularVelocityDamping * Mathf.Sign(rigidbody2D.angularVelocity);
 		}
-		else if( Mathf.Abs( rigidbody2D.angularVelocity ) > 0.0f && Mathf.Abs( rigidbody2D.angularVelocity ) < AngularDempingTreshhold )
+		else if( Mathf.Abs( rigidbody2D.angularVelocity ) > 0.0f && Mathf.Abs( rigidbody2D.angularVelocity ) < AngularDempingThreshold )
 		{
 			rigidbody2D.angularVelocity *= 1.0f - AngularyDempingLowSpeed;
 		}
@@ -218,6 +247,52 @@ public class PlayerScript : MonoBehaviour {
 
  		lastAngularVelocity = rigidbody2D.angularVelocity;
  		lastVeclocity = rigidbody2D.velocity;
-		
+
 	}
+
+	void CheckHP()
+	{
+		Debug.Log (HP);
+
+		if (HP < 0)
+		{
+			Debug.Log("player is dead");
+
+			Vector3 pos = transform.position;
+			pos.z -= 1.0f;
+
+			Instantiate(explosion, pos, transform.rotation);
+
+			isDead = true;
+
+			audio.Play();
+		}
+	}
+
+	void OnCollisionEnter2D (Collision2D other)
+	{
+		//Debug.Log( lastVeclocity.magnitude );
+
+		if(other.relativeVelocity.magnitude < damageMinVelosity)
+			return;
+
+		//Debug.Log ("physical hit");
+		HP -= Mathf.Min( (int)(physicalDamage * other.relativeVelocity.magnitude) , 101 );
+		CheckHP ();
+
+	}
+
+	void OnTriggerEnter2D (Collider2D other)
+	{
+		if( other.gameObject.name == "redLaserRay(Clone)" )
+			return;
+
+		//Debug.Log ("laser hit");
+		HP -= laserDamage;
+		CheckHP();
+	}
+
+
+
+
 }
