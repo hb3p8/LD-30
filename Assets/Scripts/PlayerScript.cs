@@ -45,6 +45,7 @@ public class PlayerScript : MonoBehaviour {
  		lastAngularVelocity = 0.0f;
  		lastVeclocity.x = 0.0f;
  		lastVeclocity.y = 0.0f;
+
 	}
 	
 	// Update is called once per frame
@@ -106,8 +107,20 @@ public class PlayerScript : MonoBehaviour {
 			rigidbody2D.angularVelocity *= 1.0f - AngularyDempingLowSpeed;
 		}
 
+		// Coordinations looping
 
-		GameControllerScript.Bottom = 55.0f;
+		//Debug.Log(Camera.main.WorldToScreenPoint(GameObject.Find("Main Camera").transform.position).x);
+
+		//Debug.Log(Camera.main.orthographicSize);
+
+		if( rigidbody2D.transform.position.x > GameControllerScript.Right + Camera.main.orthographicSize*2.0f + 3.0f )
+		{
+			rigidbody2D.transform.position = new Vector2( GameControllerScript.Left - Camera.main.orthographicSize*2.0f - 3.0f, rigidbody2D.transform.position.y );
+		}
+		else if( rigidbody2D.transform.position.x < GameControllerScript.Left - Camera.main.orthographicSize*2.0f - 3.0f )
+		{
+			rigidbody2D.transform.position = new Vector2( GameControllerScript.Right + Camera.main.orthographicSize*2.0f + 3.0f, rigidbody2D.transform.position.y );
+		}
 
  		lastAngularVelocity = rigidbody2D.angularVelocity;
  		lastVeclocity = rigidbody2D.velocity;

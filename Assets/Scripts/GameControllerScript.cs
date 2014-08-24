@@ -5,7 +5,10 @@ using System.Collections;
 public class GameControllerScript : MonoBehaviour {
 
 	// Global variables
-	static public float Bottom = -1.0f;
+	static public float Bottom = 10.0f;
+	static public float Up = 1000.0f;
+	static public float Left = 23.0f;
+	static public float Right = 105.0f;
 
 
 	// Global variables end
