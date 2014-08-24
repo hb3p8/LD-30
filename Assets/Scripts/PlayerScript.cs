@@ -32,21 +32,22 @@ public class PlayerScript : MonoBehaviour {
 
 		Speed = 0.75f;
 		AngularSpeed = 12.0f;
-
+		
 		MaxVelocity = 15.0f;
- 		MaxAngularVelocity = 150.0f;
 
- 		VelocityDemping = 0.2f;
- 		VelocityDempingTreshhold = 1.5f;
- 		VelocityDempingLowSpeed = 0.04f;
-
- 		AngularVelocityDamping = 8.0f;
- 		AngularDempingTreshhold = 50.0f;
- 		AngularyDempingLowSpeed = 0.0255f;
-
- 		lastAngularVelocity = 0.0f;
- 		lastVeclocity.x = 0.0f;
- 		lastVeclocity.y = 0.0f;
+		MaxAngularVelocity = 150.0f;
+		
+		VelocityDemping = 0.2f;
+		VelocityDempingTreshhold = 1.5f;
+		VelocityDempingLowSpeed = 0.04f;
+		
+		AngularVelocityDamping = 8.0f;
+		AngularDempingTreshhold = 50.0f;
+		AngularyDempingLowSpeed = 0.0255f;
+		
+		lastAngularVelocity = 0.0f;
+		lastVeclocity.x = 0.0f;
+		lastVeclocity.y = 0.0f;
 
 		playerTurret = GameObject.Find ("turret");
 	}
