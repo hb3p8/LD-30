@@ -28,6 +28,8 @@ public class PlayerScript : MonoBehaviour {
 
 	private List<GameObject> engines = new List<GameObject>();
 
+	private float GravityMagnitude = 0.4f;
+
 	private int HP;
 	private int MaxHP = 100;
 
@@ -44,14 +46,14 @@ public class PlayerScript : MonoBehaviour {
 	void Start () {
 
 		GravityVec.x = 0.0f;
-		GravityVec.y = -0.4f;
+		GravityVec.y = -GravityMagnitude;
 
 		Speed = 0.75f;
 		AngularSpeed = 12.0f;
 		
 		MaxVelocity = 14.0f;
 
-		MaxAngularVelocity = 150.0f;
+		MaxAngularVelocity = 1150.0f;
 		
 		VelocityDemping = 0.2f;
 		VelocityDempingTreshhold = 1.5f;
@@ -79,6 +81,17 @@ public class PlayerScript : MonoBehaviour {
 	// Update is called once per frame
 	void Update ()
 	{
+		const float halfDist = 300.0f;
+		if (transform.position.y < halfDist)
+		{
+			float factor = Mathf.Clamp01 (transform.position.y / halfDist);
+			GravityVec.y = -GravityMagnitude * (1 - factor); 
+		}
+		else
+		{
+			float factor = Mathf.Clamp01 (2.0f - transform.position.y / halfDist);
+			GravityVec.y = GravityMagnitude * (1 - factor); 
+		}
 
 		//Vector3 mousePos = Input.mousePosition;
 		Ray ray = Camera.main.ScreenPointToRay (Input.mousePosition);
@@ -140,6 +153,7 @@ public class PlayerScript : MonoBehaviour {
 
 
 		rigidbody2D.velocity += GravityVec;
+		//Debug.Log (rigidbody2D.velocity.y);
 
 		Vector3 direction = new Vector3 (0.0f, 1.0f, 0.0f);
 
