@@ -17,13 +17,17 @@ public class GameControllerScript : MonoBehaviour {
 
 	public GameObject AsteroidPrefab;
 
+	private GameObject playerObject;
+	private GameObject cameraObject;
+	private Camera camera;
+
     void Start() {
 		GameObject asteroidContainer = new GameObject ("Asteroids");
 
 		int gridX = 9;
 		int gridY = 6;
 		float spacing = 15.0f;
-		Vector3 gridOrigin = new Vector3 (0f, 40f, 0.0f);
+		Vector3 gridOrigin = new Vector3 (0f, 80f, 0.0f);
 		for (int y = 0; y < gridY; y++) {
 			for (int x = 0; x < gridX; x++) {
 				Vector3 pos = gridOrigin // grid offset
@@ -34,17 +38,31 @@ public class GameControllerScript : MonoBehaviour {
 			}
 		}
 
+
 		// Define game target position
 
 		GlobalTarget.x = 50.0f;
 		GlobalTarget.y = 300.0f;
+
+		playerObject = GameObject.Find ("destroyer");
+		cameraObject = GameObject.Find ("Main Camera");
+		camera = (Camera)cameraObject.GetComponent<Camera> ();
+
 	}
 
 	// Update is called once per frame
 	void Update () {
-	
-		//GameObject cameraObject = GameObject.Find("MainCamera");
-		//Camera camera = (Camera)cameraObject.GetComponent<Camera> ();
-//		camera.backgroundColor = Color (1.0f, 0.0f, 0.0f); 
+		const float halfDist = 300.0f;
+		if (playerObject.transform.position.y < halfDist)
+		{
+			float factor = Mathf.Clamp01 (playerObject.transform.position.y / halfDist);
+			camera.backgroundColor = new Color (0.5f, 0.9f, 0.95f) * (1 - factor) + new Color (0.1f, 0.05f, 0.3f) * factor; 
+		}
+		else
+		{
+			float factor = Mathf.Clamp01 (2.0f - playerObject.transform.position.y / halfDist);
+			Debug.Log (factor);
+			camera.backgroundColor = new Color (0.6f, 0.02f, 0.1f) * (1 - factor) + new Color (0.1f, 0.05f, 0.3f) * factor; 
+		}
 	}
 }
