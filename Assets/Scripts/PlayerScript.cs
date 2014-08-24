@@ -266,6 +266,8 @@ public class PlayerScript : MonoBehaviour {
 			isDead = true;
 
 			audio.Play();
+
+			GameControllerScript.IsFailed = true;
 		}
 	}
 
