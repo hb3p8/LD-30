@@ -28,11 +28,23 @@ public class PlayerScript : MonoBehaviour {
 
 	private List<GameObject> engines = new List<GameObject>();
 
+	private int HP;
+	private int MaxHP = 100;
+
+	private float FireRate;
+	private float lastFireTime;
+
+	// Gun constants
+	private float nextFire;	
+	public GameObject shot;
+	private float laserShotVelocity = 32.0f;
+	private float fireRate = 0.1f;
+
 	// Use this for initialization
 	void Start () {
 
 		GravityVec.x = 0.0f;
-		GravityVec.y = -0.2f;
+		GravityVec.y = -0.4f;
 
 		Speed = 0.75f;
 		AngularSpeed = 12.0f;
@@ -58,6 +70,10 @@ public class PlayerScript : MonoBehaviour {
 		engines.Add (GameObject.Find ("Engine1"));
 		engines.Add (GameObject.Find ("Engine2"));
 		engines.Add (GameObject.Find ("Engine3"));
+
+		HP = MaxHP;
+
+
 	}
 	
 	// Update is called once per frame
@@ -78,6 +94,23 @@ public class PlayerScript : MonoBehaviour {
 		radians += Mathf.PI / 2f;
 		
 		playerTurret.transform.rotation = Quaternion.AngleAxis (radians / Mathf.PI * 180f, new Vector3 (0f, 0f, 1f));
+
+
+
+		if (Input.GetButton("Fire1") && Time.time > nextFire) 
+		{
+			nextFire = Time.time + fireRate;
+			UnityEngine.Object temp_shot = Instantiate(shot, playerTurret.transform.position,
+			                                           playerTurret.transform.rotation * (Quaternion.AngleAxis(90.0f, new Vector3(0.0f,0.0f,1.0f))));
+
+			Vector3 turretDirection3 = playerTurret.transform.rotation * Vector3.up;
+			Vector2 turretDirection2 = new Vector2(turretDirection3.x, turretDirection3.y);
+
+			((GameObject)temp_shot).rigidbody2D.velocity = /*rigidbody2D.velocity + */laserShotVelocity*turretDirection2;
+
+			//audio.Play ();
+		}
+
 	}
 	
 	void FixedUpdate()
