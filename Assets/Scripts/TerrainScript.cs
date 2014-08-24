@@ -97,7 +97,7 @@ public class TerrainScript : MonoBehaviour {
 		for (int x = 0; x < power; x++) {
 
 			terrainVertices.Add (new Vector3 (x, Height + heights[x], 0.0f));
-			terrainVertices.Add (new Vector3 (x, -1.0f, 0.0f));
+			terrainVertices.Add (new Vector3 (x, -9.0f, 0.0f));
 			terrainColors.Add (TerrainColor);
 			terrainColors.Add (TerrainColor);
 			//terrainColors.Add (new Color (0.1f, 0.2f, 0.5f));
