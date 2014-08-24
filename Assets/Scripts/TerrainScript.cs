@@ -6,6 +6,7 @@ using System;
 public class TerrainScript : MonoBehaviour {
 
 	public bool BuildCollider = true;
+	public bool BuildLanding = true;
 	public Color TerrainColor = new Color (0.21f, 0.21f, 0.21f);
 	public float Height = 6.0f;
 	public float Width = 100.0f;
@@ -40,9 +41,9 @@ public class TerrainScript : MonoBehaviour {
 		
 		float displace = Height - 0.5f;
 		// Set the initial left point
-		heights[0] = UnityEngine.Random.Range (-displace, displace);
+		heights[0] = Height / 2.0f;
 		// set the initial right point
-		heights[power] = UnityEngine.Random.Range (-displace, displace);
+		heights[power] = Height / 2.0f;
 		displace *= Roughness;
 		
 		// Increase the number of segments
@@ -55,6 +56,19 @@ public class TerrainScript : MonoBehaviour {
 			}
 			// reduce our random range
 			displace *= Roughness;
+		}
+
+		if (BuildLanding)
+		{
+			// landing
+			for (int x = power / 2 - 2; x <= power / 2 + 2; x++) {
+				heights[x] = 3.0f;
+			}
+
+			// the dome
+			for (int x = power / 2 - 18; x <= power / 2 - 6; x++) {
+				heights[x] = 4.5f + UnityEngine.Random.Range (-0.5f, 0.5f);
+			}
 		}
 		
 		mesh = GetComponent<MeshFilter> ().mesh;
