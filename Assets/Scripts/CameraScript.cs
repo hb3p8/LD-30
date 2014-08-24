@@ -31,6 +31,9 @@ public Vector2 minXAndY;		// The minimum x and y coordinates the camera can have
 
 private Transform player;		// Reference to the player's transform.
 
+	private GameObject starfield1;
+	private GameObject starfield2;
+
 
 void Awake ()
 {
@@ -42,6 +45,8 @@ void Awake ()
 
 	transform.position = new Vector3( player.transform.position.x, player.transform.position.y,  -10.0f);
 
+		starfield1 = GameObject.Find ("part_starField");
+		starfield2 = GameObject.Find ("part_starField_distant");
 }
 
 
@@ -58,10 +63,29 @@ bool CheckYMargin()
 	return Mathf.Abs(transform.position.y - player.position.y) > yMargin;
 }
 
+	private int rotations = 36;
+	private bool rotated = false;
 
 void FixedUpdate ()
 {
 	TrackPlayer();
+
+	// handle rotation
+	float halfDist = 300f;
+	if (transform.position.y > halfDist && !rotated)
+	{
+		rotations = 0; 
+		rotated = true;
+	}
+	
+		if (rotations < 36)
+		{
+			Quaternion invrot = Quaternion.AngleAxis (-5, new Vector3 (0f, 1f, 0f));
+			transform.rotation *= Quaternion.AngleAxis (5, new Vector3 (0f, 0f, 1f));
+			starfield1.transform.rotation *= invrot;
+			starfield2.transform.rotation *= invrot;
+			rotations++;
+		}
 }
 
 

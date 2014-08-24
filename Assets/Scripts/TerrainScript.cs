@@ -7,7 +7,9 @@ public class TerrainScript : MonoBehaviour {
 
 	public bool BuildCollider = true;
 	public bool BuildLanding = true;
+	public bool HasTarget = false;
 	public Color TerrainColor = new Color (0.21f, 0.21f, 0.21f);
+	public GameObject LandingMarkPrefab;
 	public float Height = 6.0f;
 	public float Width = 100.0f;
 	public float Roughness = 0.7f;
@@ -58,6 +60,24 @@ public class TerrainScript : MonoBehaviour {
 			displace *= Roughness;
 		}
 
+		if (HasTarget)
+		{
+			int foundX = 0;
+			for (int x = 0; x < power; x++) {
+				if (GameControllerScript.GlobalTarget.x > (power - x))
+				{
+					foundX = x;
+					break;
+				}
+			}
+
+			heights [foundX + 1] = 3.0f;
+			heights [foundX + 0] = 3.0f;
+			heights [foundX - 1] = 3.0f;
+			GameControllerScript.GlobalTarget.y = transform.position.y - 9.0f;
+			Instantiate (LandingMarkPrefab, GameControllerScript.GlobalTarget, Quaternion.AngleAxis (180, new Vector3 (1f, 0f, 0f)));
+		}
+
 		if (BuildLanding)
 		{
 			// landing
@@ -69,6 +89,7 @@ public class TerrainScript : MonoBehaviour {
 			for (int x = power / 2 - 18; x <= power / 2 - 6; x++) {
 				heights[x] = 4.5f + UnityEngine.Random.Range (-0.5f, 0.5f);
 			}
+
 		}
 		
 		mesh = GetComponent<MeshFilter> ().mesh;
