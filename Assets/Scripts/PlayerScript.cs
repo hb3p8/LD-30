@@ -62,7 +62,7 @@ public class PlayerScript : MonoBehaviour {
 
 		Vector3 direction = new Vector3 (0.0f, 1.0f, 0.0f);
 
-		direction = rigidbody2D.transform.rotation * Vector3.right;
+		direction = rigidbody2D.transform.rotation * Vector3.down;
 
 		rigidbody2D.angularVelocity -= moveHorizontal * AngularSpeed;
 

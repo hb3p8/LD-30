@@ -1,8 +1,8 @@
 fileFormatVersion: 2
-guid: b351a099b538599499490bb8dc51ad47
+guid: 0813f653c74010c4fbbacff9e270e426
 TextureImporter:
   fileIDToRecycleName:
-    21300000: destroyer
+    21300000: wship1
   serializedVersion: 2
   mipmaps:
     mipMapMode: 0
@@ -25,10 +25,10 @@ TextureImporter:
   textureFormat: -1
   maxTextureSize: 1024
   textureSettings:
-    filterMode: -1
-    aniso: -1
+    filterMode: 1
+    aniso: 1
     mipBias: -1
-    wrapMode: -1
+    wrapMode: 1
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
