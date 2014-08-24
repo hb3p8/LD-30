@@ -1,5 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
+using System;
 
 public class PlayerScript : MonoBehaviour {
 
@@ -24,6 +26,8 @@ public class PlayerScript : MonoBehaviour {
 
 	private GameObject playerTurret;
 
+	private List<GameObject> engines = new List<GameObject>();
+
 	// Use this for initialization
 	void Start () {
 
@@ -33,7 +37,7 @@ public class PlayerScript : MonoBehaviour {
 		Speed = 0.75f;
 		AngularSpeed = 12.0f;
 		
-		MaxVelocity = 15.0f;
+		MaxVelocity = 14.0f;
 
 		MaxAngularVelocity = 150.0f;
 		
@@ -50,6 +54,10 @@ public class PlayerScript : MonoBehaviour {
 		lastVeclocity.y = 0.0f;
 
 		playerTurret = GameObject.Find ("turret");
+
+		engines.Add (GameObject.Find ("Engine1"));
+		engines.Add (GameObject.Find ("Engine2"));
+		engines.Add (GameObject.Find ("Engine3"));
 	}
 	
 	// Update is called once per frame
@@ -76,6 +84,27 @@ public class PlayerScript : MonoBehaviour {
 	{
 		float moveHorizontal = Input.GetAxis ("Horizontal");
 		float moveVertical = Input.GetAxis ("Vertical");
+
+		if (moveVertical < 0.0f)
+		{
+			moveVertical  = 0.0f;
+		}
+
+		if( moveVertical > 0.0f)
+		{
+			for( int i = 0; i < engines.Count ; i++ )
+			{
+				engines[i].particleEmitter.emit = true;
+			}
+		}
+		else
+		{
+			for( int i = 0; i < engines.Count ; i++ )
+			{
+				engines[i].particleEmitter.emit = false;
+			}
+		}
+
 
 		rigidbody2D.velocity += GravityVec;
 
