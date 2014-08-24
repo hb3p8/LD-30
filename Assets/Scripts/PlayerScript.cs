@@ -3,22 +3,48 @@ using System.Collections;
 
 public class PlayerScript : MonoBehaviour {
 
-	public Vector2 GravityVec;
+	// Constants
+	private Vector2 GravityVec;
+	private float Speed;
+	private float AngularSpeed;
+	private float MaxVelocity;
+	private float MaxAngularVelocity;
 
-	public float Speed;
+	private float VelocityDemping;
+	private float VelocityDempingTreshhold;
+	private float VelocityDempingLowSpeed;
 
-	public float AngularSpeed;
+	private float AngularVelocityDamping;
+	private float AngularDempingTreshhold;
+	private float AngularyDempingLowSpeed;
+	// Constants end
 
-	public float MaxVelocity;
-
-	public float MaxAngularVelocity;
+	private float lastAngularVelocity;
+	private Vector2 lastVeclocity;
 
 	// Use this for initialization
 	void Start () {
 
 		GravityVec.x = 0.0f;
-		GravityVec.y = -0.00f;
-	
+		GravityVec.y = -0.3f;
+
+		Speed = 0.75f;
+		AngularSpeed = 12.0f;
+
+		MaxVelocity = 15.0f;
+ 		MaxAngularVelocity = 150.0f;
+
+ 		VelocityDemping = 0.1f;
+ 		VelocityDempingTreshhold = 1.5f;
+ 		VelocityDempingLowSpeed = 0.02f;
+
+ 		AngularVelocityDamping = 4.0f;
+ 		AngularDempingTreshhold = 50.0f;
+ 		AngularyDempingLowSpeed = 0.0155f;
+
+ 		lastAngularVelocity = 0.0f;
+ 		lastVeclocity.x = 0.0f;
+ 		lastVeclocity.y = 0.0f;
 	}
 	
 	// Update is called once per frame
@@ -38,9 +64,53 @@ public class PlayerScript : MonoBehaviour {
 
 		direction = rigidbody2D.transform.rotation * Vector3.right;
 
-		rigidbody2D.angularVelocity -= moveHorizontal;
+		rigidbody2D.angularVelocity -= moveHorizontal * AngularSpeed;
 
 		Vector2 direction2d = new Vector2(direction.x, direction.y);
 		rigidbody2D.velocity += direction2d * moveVertical * Speed;
+
+		// Check Velocity
+		if( rigidbody2D.velocity.magnitude > MaxVelocity )
+		{
+			//rigidbody2D.velocity = lastVeclocity;
+			rigidbody2D.velocity = rigidbody2D.velocity.normalized * MaxVelocity;
+
+		}
+
+		// Check AngukarVelocity
+		if( Mathf.Abs(rigidbody2D.angularVelocity) > MaxAngularVelocity )
+		{
+			//rigidbody2D.angularVelocity = lastAngularVelocity;
+			rigidbody2D.angularVelocity = Mathf.Min( Mathf.Abs(rigidbody2D.angularVelocity), MaxAngularVelocity ) * Mathf.Sign(rigidbody2D.angularVelocity);
+		}
+
+		//Velocity Damping
+		float velocityMagnitude = rigidbody2D.velocity.magnitude;
+
+		if( velocityMagnitude > VelocityDempingTreshhold )
+		{
+			rigidbody2D.velocity -= VelocityDemping * rigidbody2D.velocity.normalized;
+		}
+		else if( velocityMagnitude > 0.0f && velocityMagnitude < VelocityDempingTreshhold )
+		{
+			rigidbody2D.velocity *= 1.0f - VelocityDempingLowSpeed;
+		}
+
+		// AngularVelocity Damping
+		if( Mathf.Abs( rigidbody2D.angularVelocity ) > AngularDempingTreshhold )
+		{
+			rigidbody2D.angularVelocity -= AngularVelocityDamping * Mathf.Sign(rigidbody2D.angularVelocity);
+		}
+		else if( Mathf.Abs( rigidbody2D.angularVelocity ) > 0.0f && Mathf.Abs( rigidbody2D.angularVelocity ) < AngularDempingTreshhold )
+		{
+			rigidbody2D.angularVelocity *= 1.0f - AngularyDempingLowSpeed;
+		}
+
+
+		GameControllerScript.Bottom = 55.0f;
+
+ 		lastAngularVelocity = rigidbody2D.angularVelocity;
+ 		lastVeclocity = rigidbody2D.velocity;
+		
 	}
 }

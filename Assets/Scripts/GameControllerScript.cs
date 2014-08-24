@@ -1,8 +1,15 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+
 public class GameControllerScript : MonoBehaviour {
-	
+
+	// Global variables
+	static public float Bottom = -1.0f;
+
+
+	// Global variables end
+
 	public GameObject AsteroidPrefab;
 
     void Start() {
