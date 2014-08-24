@@ -26,7 +26,7 @@ public class PlayerScript : MonoBehaviour {
 	void Start () {
 
 		GravityVec.x = 0.0f;
-		GravityVec.y = -0.3f;
+		GravityVec.y = -0.2f;
 
 		Speed = 0.75f;
 		AngularSpeed = 12.0f;
@@ -34,13 +34,13 @@ public class PlayerScript : MonoBehaviour {
 		MaxVelocity = 15.0f;
  		MaxAngularVelocity = 150.0f;
 
- 		VelocityDemping = 0.1f;
+ 		VelocityDemping = 0.2f;
  		VelocityDempingTreshhold = 1.5f;
- 		VelocityDempingLowSpeed = 0.02f;
+ 		VelocityDempingLowSpeed = 0.04f;
 
- 		AngularVelocityDamping = 4.0f;
+ 		AngularVelocityDamping = 8.0f;
  		AngularDempingTreshhold = 50.0f;
- 		AngularyDempingLowSpeed = 0.0155f;
+ 		AngularyDempingLowSpeed = 0.0255f;
 
  		lastAngularVelocity = 0.0f;
  		lastVeclocity.x = 0.0f;

@@ -10,6 +10,8 @@ public class GameControllerScript : MonoBehaviour {
 	static public float Left = 23.0f;
 	static public float Right = 105.0f;
 
+	static public Vector2 GlobalTarget;
+
 
 	// Global variables end
 
@@ -31,6 +33,11 @@ public class GameControllerScript : MonoBehaviour {
 				aNewObject.transform.parent = asteroidContainer.transform;
 			}
 		}
+
+		// Define game target position
+
+		GlobalTarget.x = 50.0f;
+		GlobalTarget.y = 300.0f;
 	}
 
 	// Update is called once per frame
