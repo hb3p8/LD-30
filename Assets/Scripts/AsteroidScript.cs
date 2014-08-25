@@ -79,7 +79,7 @@ public class AsteroidScript : MonoBehaviour {
 			pos.z = -2.0f;
 			GameObject aNewObject = (GameObject)Instantiate (Turret, this.transform.position + pos, this.transform.rotation);
 			aNewObject.transform.parent = this.transform;
-			aNewObject.name = "enemyturret";
+			aNewObject.name = "LF_aza";
 		}
 		
 		for (int x = 0; x < power; x++) {

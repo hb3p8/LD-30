@@ -43,7 +43,7 @@ public class TurretScript : MonoBehaviour {
 			UnityEngine.Object shot = Instantiate (Shot, shotSpawnPos,
 			                                           transform.rotation * (Quaternion.AngleAxis(90.0f, new Vector3(0.0f,0.0f,1.0f))));
 
-			shot.name = "eshot";
+			shot.name = "Bul_aza";
 			Vector3 turretDirection3d = transform.rotation * Vector3.up;
 			Vector2 turretDirection2d = new Vector2 (turretDirection3d.x, turretDirection3d.y);
 			

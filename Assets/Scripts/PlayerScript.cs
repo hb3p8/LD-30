@@ -41,15 +41,14 @@ public class PlayerScript : MonoBehaviour {
 	private int laserDamage = 10;
 	private float physicalDamage = 8.1f;
 	private float damageMinVelosity = 2.8f;
-
-	private float FireRate;
+	
 	private float lastFireTime;
 
 	// Gun constants
 	private float nextFire;	
 	public GameObject Shot;
 	private float laserShotVelocity = 32.0f;
-	private float fireRate = 0.123f;
+	private float fireRate = 0.3f;
 
 	private bool isDead = false;
 	private int crazyC = 2;
@@ -166,12 +165,14 @@ public class PlayerScript : MonoBehaviour {
 	
 	void FixedUpdate()
 	{
-		rigidbody2D.velocity += GravityVec;
+
 
 		if (isDead)
 		{
 			return;		
 		}
+
+		rigidbody2D.velocity += GravityVec;
 
 		float moveHorizontal = Input.GetAxis ("Horizontal");
 		float moveVertical = Input.GetAxis ("Vertical");
@@ -292,12 +293,6 @@ public class PlayerScript : MonoBehaviour {
 
 			GameControllerScript.IsFailed = true;
 
-			rigidbody2D.velocity = new Vector2(0.0f,0.0f);
-
-			for( int i = 0; i < engines.Count ; i++ )
-			{
-				engines[i].particleEmitter.emit = false;
-			}
 		}
 	}
 
