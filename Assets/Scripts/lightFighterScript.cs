@@ -64,7 +64,7 @@ public class lightFighterScript : MonoBehaviour {
 	}
 
 
-	void UpdateColor()
+	public void UpdateColor()
 	{
 		if( name == "LF_bib" )
 		{

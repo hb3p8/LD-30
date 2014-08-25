@@ -8,7 +8,7 @@ public class HeavyFighterScript : MonoBehaviour {
 	public GameObject shot;
 	
 	private float nextFire;
-	private float fireRate = 0.17f;
+	private float fireRate = 0.25f;
 	
 	private float laserShotVelocity = 27.0f;
 	
@@ -29,8 +29,8 @@ public class HeavyFighterScript : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		
-		HFTurret1 = GameObject.Find ("HFturret1");
-		HFTurret2 = GameObject.Find ("HFturret2");
+		HFTurret1 = transform.GetChild(2).gameObject;
+		HFTurret2 = transform.GetChild(3).gameObject;
 		
 		UpdateColor ();
 
@@ -114,7 +114,7 @@ public class HeavyFighterScript : MonoBehaviour {
 	}
 	
 	
-	void UpdateColor()
+	public void UpdateColor()
 	{
 		if( name == "HF_bib" )
 		{
@@ -129,7 +129,7 @@ public class HeavyFighterScript : MonoBehaviour {
 		}
 	}
 
-	void SetVelocity( Vector2 newVelocity)
+	public void SetVelocity( Vector2 newVelocity)
 	{
 		velocity = newVelocity;
 	}
