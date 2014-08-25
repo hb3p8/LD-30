@@ -24,7 +24,7 @@ public class GameControllerScript : MonoBehaviour {
 
 	// Global variables end
 
-	private int MaxLightFighters = 45;
+	private int MaxLightFighters = 30;
 	private int MaxHeavyFighters = 3;
 
 	public GameObject AsteroidPrefab;
@@ -33,6 +33,9 @@ public class GameControllerScript : MonoBehaviour {
 
 	public GameObject lightFighterPrefab;
 	public GameObject heavyFighterPrefab;
+
+	private float nextSpawn;	
+	private float spawnRate = 3.5f;
 
 	private GameObject playerObject;
 	private GameObject cameraObject;
@@ -207,26 +210,80 @@ public class GameControllerScript : MonoBehaviour {
 	static public List<GameObject> azamathHeavyFighters = new List<GameObject>();
 		 * */
 
-		// reanimate enemies
+		// reanimate light enemies
+		UnityEngine.Object tempFighter;
 
-
-		if( biboraLightFighters.Count <  MaxLightFighters - 3)
+		if ( Time.time > nextSpawn) 
 		{
-			Vector2 startVec = new Vector2(-1.0f, 0.0f);
-			Vector3 startPos = new Vector3( 130.0f , Random.Range(300.0f, 500.0f) , -2.0f);
+			nextSpawn = Time.time + spawnRate;
 
-			//startVec *= Quaternion.AngleAxis(Random.Range(-25.0f, 25.0f), new Vector3(0.0f,0.0f,1.0f));
+			if( biboraLightFighters.Count <=  MaxLightFighters - 3)
+			{
+				Vector3 startVec = new Vector3(1.5f, 0.0f,0.0f);
+				Vector3 startVecPerp = new Vector3(0.0f, 1.5f,0.0f);
+				Vector3 startPos = new Vector3( 0.0f , Random.Range(300.0f, 520.0f) , -2.0f);
 
+
+				float randomAngle = Random.Range(-30.0f, 30.0f);	
+				Quaternion rotQuat = Quaternion.AngleAxis(randomAngle, new Vector3(0.0f,0.0f,1.0f));
+
+				startVec = rotQuat * startVec;
+				startVecPerp  = rotQuat * startVecPerp;
+
+				tempFighter = Instantiate(lightFighterPrefab, startPos,
+	                                           (Quaternion.AngleAxis(180.0f+randomAngle, new Vector3(0.0f,0.0f,1.0f))));
+				tempFighter.name = "LF_bib";
+				((Rigidbody2D)(((GameObject)tempFighter).GetComponent<Rigidbody2D>())).velocity = startVec*3.0f;
+				biboraLightFighters.Add((GameObject)tempFighter);
+
+				tempFighter = Instantiate(lightFighterPrefab, startPos - startVec + startVecPerp,
+	                                           (Quaternion.AngleAxis(180.0f+randomAngle, new Vector3(0.0f,0.0f,1.0f))));
+				tempFighter.name = "LF_bib";
+				((Rigidbody2D)(((GameObject)tempFighter).GetComponent<Rigidbody2D>())).velocity = startVec*3.0f;
+				biboraLightFighters.Add((GameObject)tempFighter);
+
+
+				tempFighter = Instantiate(lightFighterPrefab, startPos - startVec - startVecPerp,
+	                                           (Quaternion.AngleAxis(180.0f+randomAngle, new Vector3(0.0f,0.0f,1.0f))));
+				tempFighter.name = "LF_bib";
+				((Rigidbody2D)(((GameObject)tempFighter).GetComponent<Rigidbody2D>())).velocity = startVec*3.0f;
+				biboraLightFighters.Add((GameObject)tempFighter);
+			}
+
+			if( azamathLightFighters.Count < MaxLightFighters - 3)
+			{
+				Vector3 startVec = new Vector3(-1.5f, 0.0f,0.0f);
+				Vector3 startVecPerp = new Vector3(0.0f, -1.5f,0.0f);
+				Vector3 startPos = new Vector3( 130.0f , Random.Range(300.0f, 520.0f) , -2.0f);
+
+
+				float randomAngle = Random.Range(-30.0f, 30.0f);	
+				Quaternion rotQuat = Quaternion.AngleAxis(randomAngle, new Vector3(0.0f,0.0f,1.0f));
+
+				startVec = rotQuat * startVec;
+				startVecPerp  = rotQuat * startVecPerp;
+
+				tempFighter = Instantiate(lightFighterPrefab, startPos,
+	                                           (Quaternion.AngleAxis(0.0f+randomAngle, new Vector3(0.0f,0.0f,1.0f))));
+				tempFighter.name = "LF_aza";
+				((Rigidbody2D)(((GameObject)tempFighter).GetComponent<Rigidbody2D>())).velocity = startVec*3.0f;
+				azamathLightFighters.Add((GameObject)tempFighter);
+
+				tempFighter = Instantiate(lightFighterPrefab, startPos - startVec + startVecPerp,
+	                                           (Quaternion.AngleAxis(0.0f+randomAngle, new Vector3(0.0f,0.0f,1.0f))));
+				tempFighter.name = "LF_aza";
+				((Rigidbody2D)(((GameObject)tempFighter).GetComponent<Rigidbody2D>())).velocity = startVec*3.0f;
+				azamathLightFighters.Add((GameObject)tempFighter);
+
+
+				tempFighter = Instantiate(lightFighterPrefab, startPos - startVec - startVecPerp,
+	                                           (Quaternion.AngleAxis(0.0f+randomAngle, new Vector3(0.0f,0.0f,1.0f))));
+				tempFighter.name = "LF_aza";
+				((Rigidbody2D)(((GameObject)tempFighter).GetComponent<Rigidbody2D>())).velocity = startVec*3.0f;
+				azamathLightFighters.Add((GameObject)tempFighter);
+			}
 		}
-
-		if( azamathLightFighters.Count < MaxLightFighters - 3)
-		{
-			Vector2 startVec = new Vector2(1.0f, 0.0f);
-			Vector3 startPos = new Vector3( -2.0f , Random.Range(300.0f, 500.0f) , -2.0f); 
-
-			//startVec *= Quaternion.AngleAxis(Random.Range(-25.0f, 25.0f), new Vector3(0.0f,0.0f,1.0f));
-		}
-
+/*
 		if( biboraHeavyFighters.Count <  MaxHeavyFighters )
 		{
 			Vector2 startVec = new Vector2(-1.0f, 0.0f);
@@ -240,13 +297,13 @@ public class GameControllerScript : MonoBehaviour {
 			Vector3 startPos = new Vector3( -2.0f , Random.Range(470.0f, 530.0f) , -14.0f); 
 
 		}
-
+*/
 		// kill enemies
 		for(int i = 0;  i < biboraLightFighters.Count; i++)
 		{
 			if( biboraLightFighters[i] )
 			{
-				if( biboraLightFighters[i].transform.position.x > 135.0f &&  biboraLightFighters[i].transform.position.x < -7.0f   )
+				if( biboraLightFighters[i].transform.position.x > 135.0f ||  biboraLightFighters[i].transform.position.x < -7.0f   )
 				{
 					UnityEngine.Object.Destroy (biboraLightFighters[i]);
 					biboraLightFighters.RemoveAt(i);
@@ -263,7 +320,7 @@ public class GameControllerScript : MonoBehaviour {
 		{
 			if( azamathLightFighters[i] )
 			{
-				if( azamathLightFighters[i].transform.position.x > 135.0f &&  azamathLightFighters[i].transform.position.x < -7.0f   )
+				if( azamathLightFighters[i].transform.position.x > 135.0f ||  azamathLightFighters[i].transform.position.x < -7.0f   )
 				{
 					UnityEngine.Object.Destroy (azamathLightFighters[i]);
 					azamathLightFighters.RemoveAt(i);
