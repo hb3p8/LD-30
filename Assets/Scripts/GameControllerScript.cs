@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 
 public class GameControllerScript : MonoBehaviour {
@@ -15,12 +16,26 @@ public class GameControllerScript : MonoBehaviour {
 	static public bool IsFailed = false;
 	static public bool IsWin = false;
 
+	static public List<GameObject> biboraLightFighters = new List<GameObject>();
+	static public List<GameObject> azamathLightFighters = new List<GameObject>();
+
+	static public List<GameObject> biboraHeavyFighters = new List<GameObject>();
+	static public List<GameObject> azamathHeavyFighters = new List<GameObject>();
 
 	// Global variables end
+
+	private int MaxLightFighters = 30;
+	private int MaxHeavyFighters = 3;
 
 	public GameObject AsteroidPrefab;
 	public GameObject PlanetPrefab;
 	public GameObject TurretPrefab;
+
+	public GameObject lightFighterPrefab;
+	public GameObject heavyFighterPrefab;
+
+	private float nextSpawn;	
+	private float spawnRate = 3.5f;
 
 	private GameObject playerObject;
 	private GameObject cameraObject;
@@ -122,6 +137,41 @@ public class GameControllerScript : MonoBehaviour {
 		cameraObject = GameObject.Find ("Main Camera");
 		camera = (Camera)cameraObject.GetComponent<Camera> ();
 
+		//Spawn Heavy Fighters
+		UnityEngine.Object tempFighter;
+
+		for( int i = 0 ; i < MaxHeavyFighters; i++)
+		{
+			Vector2 startVec = new Vector2(-0.0f, 0.0f);
+			Vector3 startPos = new Vector3( Random.Range(-5.0f, 130.0f)  , Random.Range(440.0f, 560.0f) , -2.0f); 
+
+			tempFighter = Instantiate(heavyFighterPrefab, startPos,
+                                           (Quaternion.AngleAxis(180.0f, new Vector3(0.0f,0.0f,1.0f))));
+
+			tempFighter.name = "HF_bib";
+			((HeavyFighterScript)(((GameObject)tempFighter).GetComponent<HeavyFighterScript>())).SetVelocity(startVec);
+
+			biboraHeavyFighters.Add((GameObject)tempFighter);
+
+		}
+
+		for( int i = 0 ; i < MaxHeavyFighters; i++)
+		{
+			Vector2 startVec = new Vector2(0.0f, 0.0f);
+			Vector3 startPos = new Vector3( Random.Range(-5.0f, 130.0f)  , Random.Range(440.0f, 560.0f) , -2.0f); 
+
+			tempFighter = Instantiate(heavyFighterPrefab, startPos,
+                                           (Quaternion.AngleAxis(0.0f, new Vector3(0.0f,0.0f,1.0f))));
+
+			tempFighter.name = "HF_aza";
+			((HeavyFighterScript)(((GameObject)tempFighter).GetComponent<HeavyFighterScript>())).SetVelocity(startVec);
+
+			azamathHeavyFighters.Add((GameObject)tempFighter);
+
+		}
+
+
+
 	}
 
 	// Update is called once per frame
@@ -151,6 +201,174 @@ public class GameControllerScript : MonoBehaviour {
 
 		// Control enemies population
 
-		
+		/*
+		 * 
+		 * 	static public List<GameObject> biboraLightFighters = new List<GameObject>();
+	static public List<GameObject> azamathLightFighters = new List<GameObject>();
+
+	static public List<GameObject> biboraHeavyFighters = new List<GameObject>();
+	static public List<GameObject> azamathHeavyFighters = new List<GameObject>();
+		 * */
+
+		// reanimate light enemies
+		UnityEngine.Object tempFighter;
+
+		if ( Time.time > nextSpawn) 
+		{
+			nextSpawn = Time.time + spawnRate;
+
+			if( biboraLightFighters.Count <=  MaxLightFighters - 3)
+			{
+				Vector3 startVec = new Vector3(1.5f, 0.0f,0.0f);
+				Vector3 startVecPerp = new Vector3(0.0f, 1.5f,0.0f);
+				Vector3 startPos = new Vector3( 0.0f , Random.Range(300.0f, 520.0f) , -2.0f);
+
+
+				float randomAngle = Random.Range(-30.0f, 30.0f);	
+				Quaternion rotQuat = Quaternion.AngleAxis(randomAngle, new Vector3(0.0f,0.0f,1.0f));
+
+				startVec = rotQuat * startVec;
+				startVecPerp  = rotQuat * startVecPerp;
+
+				tempFighter = Instantiate(lightFighterPrefab, startPos,
+	                                           (Quaternion.AngleAxis(180.0f+randomAngle, new Vector3(0.0f,0.0f,1.0f))));
+				tempFighter.name = "LF_bib";
+				((Rigidbody2D)(((GameObject)tempFighter).GetComponent<Rigidbody2D>())).velocity = startVec*3.0f;
+				biboraLightFighters.Add((GameObject)tempFighter);
+
+				tempFighter = Instantiate(lightFighterPrefab, startPos - startVec + startVecPerp,
+	                                           (Quaternion.AngleAxis(180.0f+randomAngle, new Vector3(0.0f,0.0f,1.0f))));
+				tempFighter.name = "LF_bib";
+				((Rigidbody2D)(((GameObject)tempFighter).GetComponent<Rigidbody2D>())).velocity = startVec*3.0f;
+				biboraLightFighters.Add((GameObject)tempFighter);
+
+
+				tempFighter = Instantiate(lightFighterPrefab, startPos - startVec - startVecPerp,
+	                                           (Quaternion.AngleAxis(180.0f+randomAngle, new Vector3(0.0f,0.0f,1.0f))));
+				tempFighter.name = "LF_bib";
+				((Rigidbody2D)(((GameObject)tempFighter).GetComponent<Rigidbody2D>())).velocity = startVec*3.0f;
+				biboraLightFighters.Add((GameObject)tempFighter);
+			}
+
+			if( azamathLightFighters.Count < MaxLightFighters - 3)
+			{
+				Vector3 startVec = new Vector3(-1.5f, 0.0f,0.0f);
+				Vector3 startVecPerp = new Vector3(0.0f, -1.5f,0.0f);
+				Vector3 startPos = new Vector3( 130.0f , Random.Range(300.0f, 520.0f) , -2.0f);
+
+
+				float randomAngle = Random.Range(-30.0f, 30.0f);	
+				Quaternion rotQuat = Quaternion.AngleAxis(randomAngle, new Vector3(0.0f,0.0f,1.0f));
+
+				startVec = rotQuat * startVec;
+				startVecPerp  = rotQuat * startVecPerp;
+
+				tempFighter = Instantiate(lightFighterPrefab, startPos,
+	                                           (Quaternion.AngleAxis(0.0f+randomAngle, new Vector3(0.0f,0.0f,1.0f))));
+				tempFighter.name = "LF_aza";
+				((Rigidbody2D)(((GameObject)tempFighter).GetComponent<Rigidbody2D>())).velocity = startVec*3.0f;
+				azamathLightFighters.Add((GameObject)tempFighter);
+
+				tempFighter = Instantiate(lightFighterPrefab, startPos - startVec + startVecPerp,
+	                                           (Quaternion.AngleAxis(0.0f+randomAngle, new Vector3(0.0f,0.0f,1.0f))));
+				tempFighter.name = "LF_aza";
+				((Rigidbody2D)(((GameObject)tempFighter).GetComponent<Rigidbody2D>())).velocity = startVec*3.0f;
+				azamathLightFighters.Add((GameObject)tempFighter);
+
+
+				tempFighter = Instantiate(lightFighterPrefab, startPos - startVec - startVecPerp,
+	                                           (Quaternion.AngleAxis(0.0f+randomAngle, new Vector3(0.0f,0.0f,1.0f))));
+				tempFighter.name = "LF_aza";
+				((Rigidbody2D)(((GameObject)tempFighter).GetComponent<Rigidbody2D>())).velocity = startVec*3.0f;
+				azamathLightFighters.Add((GameObject)tempFighter);
+			}
+		}
+/*
+		if( biboraHeavyFighters.Count <  MaxHeavyFighters )
+		{
+			Vector2 startVec = new Vector2(-1.0f, 0.0f);
+			Vector3 startPos = new Vector3( 130.0f , Random.Range(470.0f, 530.0f) , -14.0f); 
+
+		}
+
+		if( azamathHeavyFighters.Count <  MaxHeavyFighters )
+		{
+			Vector2 startVec = new Vector2(1.0f, 0.0f);
+			Vector3 startPos = new Vector3( -2.0f , Random.Range(470.0f, 530.0f) , -14.0f); 
+
+		}
+*/
+		// kill enemies
+		for(int i = 0;  i < biboraLightFighters.Count; i++)
+		{
+			if( biboraLightFighters[i] )
+			{
+				if( biboraLightFighters[i].transform.position.x > 135.0f ||  biboraLightFighters[i].transform.position.x < -7.0f   )
+				{
+					UnityEngine.Object.Destroy (biboraLightFighters[i]);
+					biboraLightFighters.RemoveAt(i);
+				}
+			}
+			else
+			{
+				biboraLightFighters.RemoveAt(i);
+			}
+
+		}
+
+		for(int i = 0;  i < azamathLightFighters.Count; i++)
+		{
+			if( azamathLightFighters[i] )
+			{
+				if( azamathLightFighters[i].transform.position.x > 135.0f ||  azamathLightFighters[i].transform.position.x < -7.0f   )
+				{
+					UnityEngine.Object.Destroy (azamathLightFighters[i]);
+					azamathLightFighters.RemoveAt(i);
+				}
+			}
+			else
+			{
+				azamathLightFighters.RemoveAt(i);
+			}
+			
+		}
+
+/*
+		for(int i = 0;  i < biboraHeavyFighters.Count; i++)
+		{
+			if( biboraHeavyFighters[i] )
+			{
+				if( biboraHeavyFighters[i].transform.position.x > 135.0f &&  biboraHeavyFighters[i].transform.position.x < -7.0f   )
+				{
+					UnityEngine.Object.Destroy (biboraHeavyFighters[i]);
+					biboraHeavyFighters.RemoveAt(i);
+				}
+			}
+			else
+			{
+				biboraHeavyFighters.RemoveAt(i);
+			}
+			
+		}
+
+		for(int i = 0;  i < azamathHeavyFighters.Count; i++)
+		{
+			if( azamathHeavyFighters[i] )
+			{
+				if( azamathHeavyFighters[i].transform.position.x > 135.0f &&  azamathHeavyFighters[i].transform.position.x < -7.0f   )
+				{
+					UnityEngine.Object.Destroy (azamathHeavyFighters[i]);
+					azamathHeavyFighters.RemoveAt(i);
+				}
+			}
+			else
+			{
+				azamathHeavyFighters.RemoveAt(i);
+			}
+			
+		}
+*/
+
+
 	}
 }
