@@ -304,7 +304,7 @@ public class PlayerScript : MonoBehaviour {
 			return;
 
 		//Debug.Log ("physical hit");
-		HP -= Mathf.Min( (int)(physicalDamage * other.relativeVelocity.magnitude) , 101 );
+		HP -= Mathf.Min( (int)(physicalDamage * other.relativeVelocity.magnitude) , 40 );
 		CheckHP ();
 
 	}
