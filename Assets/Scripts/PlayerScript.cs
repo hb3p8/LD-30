@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using System;
@@ -44,7 +44,7 @@ public class PlayerScript : MonoBehaviour {
 	private float nextFire;	
 	public GameObject shot;
 	private float laserShotVelocity = 32.0f;
-	private float fireRate = 0.1f;
+	private float fireRate = 0.123f;
 
 	private bool isDead = false;
 	private int crazyC = 30;
@@ -89,6 +89,18 @@ public class PlayerScript : MonoBehaviour {
 	// Update is called once per frame
 	void Update ()
 	{
+		const float halfDist = 300.0f;
+		if (transform.position.y < halfDist)
+		{
+			float factor = Mathf.Clamp01 (transform.position.y / halfDist);
+			GravityVec.y = -GravityMagnitude * (1 - factor); 
+		}
+		else
+		{
+			float factor = Mathf.Clamp01 (2.0f - transform.position.y / halfDist);
+			GravityVec.y = GravityMagnitude * (1 - factor); 
+		}
+
 		if (isDead && crazyC > 0)
 		{
 			Vector3 pos = transform.position;
@@ -101,18 +113,6 @@ public class PlayerScript : MonoBehaviour {
 		else if(isDead)
 		{
 			return;
-		}
-
-		const float halfDist = 300.0f;
-		if (transform.position.y < halfDist)
-		{
-			float factor = Mathf.Clamp01 (transform.position.y / halfDist);
-			GravityVec.y = -GravityMagnitude * (1 - factor); 
-		}
-		else
-		{
-			float factor = Mathf.Clamp01 (2.0f - transform.position.y / halfDist);
-			GravityVec.y = GravityMagnitude * (1 - factor); 
 		}
 
 		//Vector3 mousePos = Input.mousePosition;
@@ -146,12 +146,15 @@ public class PlayerScript : MonoBehaviour {
 			Vector2 turretDirection2 = new Vector2(turretDirection3.x, turretDirection3.y);
 
 			((GameObject)temp_shot).rigidbody2D.velocity = /*rigidbody2D.velocity + */laserShotVelocity*turretDirection2;
+			((GameObject)temp_shot).name = "Bul_destr";
 		}
 
 	}
 	
 	void FixedUpdate()
 	{
+		rigidbody2D.velocity += GravityVec;
+
 		if (isDead)
 		{
 			return;		
@@ -180,8 +183,6 @@ public class PlayerScript : MonoBehaviour {
 			}
 		}
 
-
-		rigidbody2D.velocity += GravityVec;
 		//Debug.Log (rigidbody2D.velocity.y);
 
 		Vector3 direction = new Vector3 (0.0f, 1.0f, 0.0f);
@@ -268,6 +269,13 @@ public class PlayerScript : MonoBehaviour {
 			audio.Play();
 
 			GameControllerScript.IsFailed = true;
+
+			rigidbody2D.velocity = new Vector2(0.0f,0.0f);
+
+			for( int i = 0; i < engines.Count ; i++ )
+			{
+				engines[i].particleEmitter.emit = false;
+			}
 		}
 	}
 
@@ -286,8 +294,15 @@ public class PlayerScript : MonoBehaviour {
 
 	void OnTriggerEnter2D (Collider2D other)
 	{
-		if( other.gameObject.name == "redLaserRay(Clone)" )
+		if( other.gameObject.name == "Bul_destr" )
 			return;
+
+		if( other.gameObject.name == "LF_aza" || other.gameObject.name == "LF_bib")
+		{
+			HP -= 30;
+			CheckHP();
+			return;
+		}
 
 		//Debug.Log ("laser hit");
 		HP -= laserDamage;

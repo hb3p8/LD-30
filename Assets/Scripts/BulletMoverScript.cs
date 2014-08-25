@@ -7,6 +7,8 @@ public class BulletMoverScript : MonoBehaviour
 
 	public GameObject explosion;
 
+	private bool isDestriyed = false;
+
 	void Start ()
 	{
 		//setParam (10.0f, 0.0f);
@@ -22,7 +24,10 @@ public class BulletMoverScript : MonoBehaviour
 
 	void FixedUpdate()
 	{
-		if( (rigidbody2D.position - new Vector2(Camera.main.transform.position.x , Camera.main.transform.position.y)).magnitude > 50.0f )
+		if(isDestriyed)
+			Object.Destroy (this.gameObject);
+
+		if( (rigidbody2D.position - new Vector2(Camera.main.transform.position.x , Camera.main.transform.position.y)).magnitude > 30.0f )
 		{
 			Object.Destroy(this.gameObject);
 		}
@@ -30,11 +35,21 @@ public class BulletMoverScript : MonoBehaviour
 
 	void OnTriggerEnter2D (Collider2D other)
 	{
-		if (other.gameObject.name != "destroyer")
+
+		if (/*other.gameObject.name != "destroyer"*/
+		    ( other.gameObject.name == "Asteroid(Clone)" || other.gameObject.name == "TerrainObject"
+			||
+			name == "Bul_destr" && (other.gameObject.name == "LF_bib" || other.gameObject.name == "LF_aza" || other.gameObject.name == "HF_bib" || other.gameObject.name == "HF_aza"))
+		    ||
+		    (name == "Bul_bib" && (other.gameObject.name == "Bul_destr" || other.gameObject.name == "LF_aza" || other.gameObject.name == "HF_aza" || other.gameObject.name == "destroyer"))
+		    ||
+		    (name == "Bul_aza" && (other.gameObject.name == "Bul_destr" || other.gameObject.name == "LF_bib" || other.gameObject.name == "HF_bib" || other.gameObject.name == "destroyer"))
+		    )
 		{
-			Object.Destroy (this.gameObject);
+			isDestriyed = true;
 			Instantiate(explosion, transform.position, transform.rotation);
 		}
+
 
 	}
 	
