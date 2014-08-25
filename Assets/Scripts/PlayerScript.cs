@@ -33,7 +33,12 @@ public class PlayerScript : MonoBehaviour {
 	private int HP;
 	private int MaxHP = 100;
 
-	private int laserDamage = 5;
+	public int GetHP()
+	{
+		return HP;
+	}
+
+	private int laserDamage = 10;
 	private float physicalDamage = 8.1f;
 	private float damageMinVelosity = 2.8f;
 
@@ -42,14 +47,16 @@ public class PlayerScript : MonoBehaviour {
 
 	// Gun constants
 	private float nextFire;	
-	public GameObject shot;
+	public GameObject Shot;
 	private float laserShotVelocity = 32.0f;
 	private float fireRate = 0.1f;
 
 	private bool isDead = false;
-	private int crazyC = 30;
+	private int crazyC = 2;
 
-	public GameObject explosion;
+	public GameObject Explosion;
+
+	public GameObject Engine;
 	// Use this for initialization
 	void Start () {
 
@@ -77,9 +84,17 @@ public class PlayerScript : MonoBehaviour {
 
 		playerTurret = GameObject.Find ("turret");
 
-		engines.Add (GameObject.Find ("Engine1"));
-		engines.Add (GameObject.Find ("Engine2"));
-		engines.Add (GameObject.Find ("Engine3"));
+		for (int x = 0; x < 3; ++x)
+		{
+			Vector3 pos = transform.position;
+			pos.z -= 1.0f;
+			pos.y -= 0.5f;
+			pos.x += 0.25f * (x - 1);
+			
+			GameObject engine = (GameObject)Instantiate(Engine, pos, Quaternion.identity);
+			engine.transform.parent = transform;
+			engines.Add (engine);
+		}
 
 		HP = MaxHP;
 
@@ -94,12 +109,13 @@ public class PlayerScript : MonoBehaviour {
 			Vector3 pos = transform.position;
 			pos.z -= 1.0f;
 			
-			Instantiate(explosion, pos, transform.rotation);
+			Instantiate(Explosion, pos, transform.rotation);
 			crazyC--;
 			return;
 		}
 		else if(isDead)
 		{
+			rigidbody2D.velocity += GravityVec * 0.1f;
 			return;
 		}
 
@@ -119,9 +135,6 @@ public class PlayerScript : MonoBehaviour {
 		Ray ray = Camera.main.ScreenPointToRay (Input.mousePosition);
 		Vector3 mousePos = ray.origin;
 		Vector3 currentPos = playerTurret.transform.position;//new Vector3 (Screen.width / 2, Screen.height / 2);
-		//Debug.Log (mousePos.x);
-		//Debug.Log (currentPos.x);
-		//Debug.Log ("--------------------");
 
 		float x = currentPos.x - mousePos.x;
 		float y = currentPos.y - mousePos.y;
@@ -139,7 +152,7 @@ public class PlayerScript : MonoBehaviour {
 			Vector3 shotSpawnPos = playerTurret.transform.position;
 			shotSpawnPos.z += 0.05f;
 
-			UnityEngine.Object temp_shot = Instantiate(shot, shotSpawnPos,
+			UnityEngine.Object temp_shot = Instantiate(Shot, shotSpawnPos,
 			                                           playerTurret.transform.rotation * (Quaternion.AngleAxis(90.0f, new Vector3(0.0f,0.0f,1.0f))));
 
 			Vector3 turretDirection3 = playerTurret.transform.rotation * Vector3.up;
@@ -167,16 +180,19 @@ public class PlayerScript : MonoBehaviour {
 
 		if( moveVertical > 0.0f)
 		{
-			for( int i = 0; i < engines.Count ; i++ )
-			{
-				engines[i].particleEmitter.emit = true;
-			}
+			//for( int i = 0; i < engines.Count ; i++ )
+			//{
+				//engines[i].particleEmitter.emit = true;
+				//engines[i].particleSystem.particleEmitter.emit = true;
+			//}
 		}
 		else
 		{
 			for( int i = 0; i < engines.Count ; i++ )
 			{
-				engines[i].particleEmitter.emit = false;
+				//engines[i].particleEmitter.emit = false;
+				engines[i].transform.GetChild(0).particleSystem.Clear();
+				engines[i].transform.GetChild(1).particleSystem.Clear();
 			}
 		}
 
@@ -261,9 +277,15 @@ public class PlayerScript : MonoBehaviour {
 			Vector3 pos = transform.position;
 			pos.z -= 1.0f;
 
-			Instantiate(explosion, pos, transform.rotation);
+			Instantiate(Explosion, pos, transform.rotation);
 
 			isDead = true;
+			// stop engines
+			for( int i = 0; i < engines.Count ; i++ )
+			{
+				engines[i].transform.GetChild(0).particleSystem.Stop();
+				engines[i].transform.GetChild(1).particleSystem.Stop();
+			}
 
 			audio.Play();
 

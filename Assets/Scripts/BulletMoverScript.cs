@@ -7,9 +7,13 @@ public class BulletMoverScript : MonoBehaviour
 
 	public GameObject explosion;
 
+	private bool isEnemyShot = false;
+	private bool needToDestroy = false; // \m/
+
 	void Start ()
 	{
 		//setParam (10.0f, 0.0f);
+		isEnemyShot = this.gameObject.name == "eshot";
 	}
 
 	void setParam( float newSpeed, float newRotAngle )
@@ -22,7 +26,7 @@ public class BulletMoverScript : MonoBehaviour
 
 	void FixedUpdate()
 	{
-		if( (rigidbody2D.position - new Vector2(Camera.main.transform.position.x , Camera.main.transform.position.y)).magnitude > 50.0f )
+		if( needToDestroy || (rigidbody2D.position - new Vector2(Camera.main.transform.position.x , Camera.main.transform.position.y)).magnitude > 50.0f )
 		{
 			Object.Destroy(this.gameObject);
 		}
@@ -30,9 +34,16 @@ public class BulletMoverScript : MonoBehaviour
 
 	void OnTriggerEnter2D (Collider2D other)
 	{
-		if (other.gameObject.name != "destroyer")
+		bool isHitWithPlayer = other.gameObject.name == "destroyer";
+		bool isHitWithEnemy = other.gameObject.name == "enemyturret";
+
+		if (isHitWithEnemy && isEnemyShot || isHitWithPlayer && !isEnemyShot)
 		{
-			Object.Destroy (this.gameObject);
+			// do nothing
+		}
+		else
+		{
+			needToDestroy = true;
 			Instantiate(explosion, transform.position, transform.rotation);
 		}
 

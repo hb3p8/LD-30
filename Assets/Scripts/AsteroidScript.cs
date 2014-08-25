@@ -8,8 +8,10 @@ public class AsteroidScript : MonoBehaviour {
 	public bool BuildCollider = true;
 	public Color TerrainColor = new Color (0.21f, 0.21f, 0.21f);
 	public float Height = 6.0f;
-	public int Steps = 16;
+	public int Steps = 20;
 	public float Roughness = 0.7f;
+	public GameObject Turret;
+	public bool placeTurret = false; 
 	
 	// This first list contains every vertex of the mesh that we are going to render
 	private List<Vector3> terrainVertices = new List<Vector3>();
@@ -68,6 +70,17 @@ public class AsteroidScript : MonoBehaviour {
 
 		terrainVertices.Add (new Vector3 (0.0f, 0.0f, 0.0f));
 		terrainColors.Add (TerrainColor);
+
+		if (placeTurret)
+		{
+			heights[0] += Mathf.Abs (heights[0]) * 0.5f;
+			heights[1] = heights[0];
+			Vector3 pos = fromPolar (new Vector2(heights[0], 1f * step));
+			pos.z = -2.0f;
+			GameObject aNewObject = (GameObject)Instantiate (Turret, this.transform.position + pos, this.transform.rotation);
+			aNewObject.transform.parent = this.transform;
+			aNewObject.name = "enemyturret";
+		}
 		
 		for (int x = 0; x < power; x++) {
 			terrainVertices.Add (fromPolar (new Vector2(Mathf.Max (Height + heights[x], 0.5f), x * step)));
