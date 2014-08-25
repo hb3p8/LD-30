@@ -97,7 +97,8 @@ public class lightFighterScript : MonoBehaviour {
 		if ( other.gameObject.name == "destroyer")
 		{
 			Instantiate(explosion, transform.position, transform.rotation);
-			Object.Destroy (this.gameObject);
+			//Object.Destroy (this.gameObject);
+			isDestroyed = true;
 		}
 		else if( other.gameObject.name == "Bul_bib" && name == "LF_aza" )
 		{
@@ -120,7 +121,7 @@ public class lightFighterScript : MonoBehaviour {
 	{
 
 		Instantiate(explosion, transform.position, transform.rotation);
-		Object.Destroy (this.gameObject);
-		
+		//Object.Destroy (this.gameObject);
+		isDestroyed = true;
 	}
 }
