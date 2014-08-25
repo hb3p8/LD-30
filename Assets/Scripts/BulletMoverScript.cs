@@ -9,9 +9,10 @@ public class BulletMoverScript : MonoBehaviour
 
 	private bool isDestriyed = false;
 
+
 	void Start ()
 	{
-		//setParam (10.0f, 0.0f);
+
 	}
 
 	void setParam( float newSpeed, float newRotAngle )
@@ -24,10 +25,7 @@ public class BulletMoverScript : MonoBehaviour
 
 	void FixedUpdate()
 	{
-		if(isDestriyed)
-			Object.Destroy (this.gameObject);
-
-		if( (rigidbody2D.position - new Vector2(Camera.main.transform.position.x , Camera.main.transform.position.y)).magnitude > 30.0f )
+		if( isDestriyed || (rigidbody2D.position - new Vector2(Camera.main.transform.position.x , Camera.main.transform.position.y)).magnitude > 50.0f )
 		{
 			Object.Destroy(this.gameObject);
 		}
@@ -49,7 +47,6 @@ public class BulletMoverScript : MonoBehaviour
 			isDestriyed = true;
 			Instantiate(explosion, transform.position, transform.rotation);
 		}
-
 
 	}
 	

@@ -29,6 +29,7 @@ public class GameControllerScript : MonoBehaviour {
 
 	public GameObject AsteroidPrefab;
 	public GameObject PlanetPrefab;
+	public GameObject TurretPrefab;
 
 	public GameObject lightFighterPrefab;
 	public GameObject heavyFighterPrefab;
@@ -84,6 +85,13 @@ public class GameControllerScript : MonoBehaviour {
 					asteroid.TerrainColor.r = asteroid.TerrainColor.r + Random.Range (0.0f, 0.05f);
 					
 					aNewObject.transform.parent = asteroidContainer.transform;
+
+					// place turret
+					if (Random.Range (0f, 1f) > 0.5f)
+					{
+						asteroid.Turret = TurretPrefab;
+						asteroid.placeTurret = true;
+					}
 				}
 			}
 		}
