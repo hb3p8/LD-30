@@ -148,5 +148,9 @@ public class GameControllerScript : MonoBehaviour {
 				}
 			}
 		}
+
+		// Control enemies population
+
+		
 	}
 }

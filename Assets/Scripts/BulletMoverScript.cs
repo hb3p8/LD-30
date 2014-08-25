@@ -7,6 +7,8 @@ public class BulletMoverScript : MonoBehaviour
 
 	public GameObject explosion;
 
+	private bool isDestriyed = false;
+
 	private bool isEnemyShot = false;
 	private bool needToDestroy = false; // \m/
 
@@ -34,6 +36,18 @@ public class BulletMoverScript : MonoBehaviour
 
 	void OnTriggerEnter2D (Collider2D other)
 	{
+
+		if (/*other.gameObject.name != "destroyer"*/
+		    ( other.gameObject.name == "Asteroid(Clone)" || other.gameObject.name == "TerrainObject"
+			||
+			name == "Bul_destr" && (other.gameObject.name == "LF_bib" || other.gameObject.name == "LF_aza" || other.gameObject.name == "HF_bib" || other.gameObject.name == "HF_aza"))
+		    ||
+		    (name == "Bul_bib" && (other.gameObject.name == "Bul_destr" || other.gameObject.name == "LF_aza" || other.gameObject.name == "HF_aza" || other.gameObject.name == "destroyer"))
+		    ||
+		    (name == "Bul_aza" && (other.gameObject.name == "Bul_destr" || other.gameObject.name == "LF_bib" || other.gameObject.name == "HF_bib" || other.gameObject.name == "destroyer"))
+		    )
+		{
+			isDestriyed = true;
 		bool isHitWithPlayer = other.gameObject.name == "destroyer";
 		bool isHitWithEnemy = other.gameObject.name == "enemyturret";
 
@@ -46,6 +60,7 @@ public class BulletMoverScript : MonoBehaviour
 			needToDestroy = true;
 			Instantiate(explosion, transform.position, transform.rotation);
 		}
+
 
 	}
 	
