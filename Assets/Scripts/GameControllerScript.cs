@@ -8,8 +8,8 @@ public class GameControllerScript : MonoBehaviour {
 	// Global variables
 	static public float Bottom = 10.0f;
 	static public float Up = 1000.0f;
-	static public float Left = 23.0f;
-	static public float Right = 105.0f;
+	static public float Left = 24.0f;
+	static public float Right = 106.0f;
 
 	static public Vector3 GlobalTarget;
 
@@ -49,7 +49,7 @@ public class GameControllerScript : MonoBehaviour {
 		{
 			int gridX = 7;
 			int gridY = 6;
-			float spacing = 20.0f;
+			float spacing = 24.0f;
 			Vector3 gridOrigin = new Vector3 (0f, 80f, 0.0f);
 			for (int y = 0; y < gridY; y++) {
 				for (int x = 0; x < gridX; x++) {
