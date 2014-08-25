@@ -48,7 +48,7 @@ public class PlayerScript : MonoBehaviour {
 	private float nextFire;	
 	public GameObject Shot;
 	private float laserShotVelocity = 32.0f;
-	private float fireRate = 0.3f;
+	private float fireRate = 0.175f;
 
 	private bool isDead = false;
 	private int crazyC = 2;
