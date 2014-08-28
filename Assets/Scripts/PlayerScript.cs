@@ -31,7 +31,7 @@ public class PlayerScript : MonoBehaviour {
 	private float GravityMagnitude = 0.4f;
 
 	private int HP;
-	private int MaxHP = 100;
+	private int MaxHP = 120;
 
 	public int GetHP()
 	{
@@ -39,16 +39,16 @@ public class PlayerScript : MonoBehaviour {
 	}
 
 	private int laserDamage = 10;
-	private float physicalDamage = 8.1f;
-	private float damageMinVelosity = 2.8f;
+	private float physicalDamage = 3.5f;
+	private float damageMinVelosity = 3.5f;
 	
 	private float lastFireTime;
 
 	// Gun constants
 	private float nextFire;	
 	public GameObject Shot;
-	private float laserShotVelocity = 32.0f;
-	private float fireRate = 0.175f;
+	private float laserShotVelocity = 40.0f;
+	private float fireRate = 0.125f;
 
 	private bool isDead = false;
 	private int crazyC = 2;
@@ -57,6 +57,12 @@ public class PlayerScript : MonoBehaviour {
 
 	public GameObject Engine;
 	// Use this for initialization
+
+	// Audio 
+
+	private AudioSource explosion;
+	private AudioSource collisionHit;
+
 	void Start () {
 
 		GravityVec.x = 0.0f;
@@ -97,6 +103,8 @@ public class PlayerScript : MonoBehaviour {
 
 		HP = MaxHP;
 
+		explosion = GetComponents<AudioSource> ()[0];
+		collisionHit = GetComponents<AudioSource> ()[1];
 
 	}
 	
@@ -272,7 +280,7 @@ public class PlayerScript : MonoBehaviour {
 	{
 		Debug.Log (HP);
 
-		if (HP < 0)
+		if (HP <= 0)
 		{
 			Debug.Log("player is dead");
 
@@ -289,7 +297,7 @@ public class PlayerScript : MonoBehaviour {
 				engines[i].transform.GetChild(1).particleSystem.Stop();
 			}
 
-			audio.Play();
+			explosion.Play();
 
 			GameControllerScript.IsFailed = true;
 
@@ -302,9 +310,9 @@ public class PlayerScript : MonoBehaviour {
 
 		if(other.relativeVelocity.magnitude < damageMinVelosity)
 			return;
-
+		collisionHit.Play();
 		//Debug.Log ("physical hit");
-		HP -= Mathf.Min( (int)(physicalDamage * other.relativeVelocity.magnitude) , 40 );
+		HP -= Mathf.Min( (int)(physicalDamage * other.relativeVelocity.magnitude) , 35 );
 		CheckHP ();
 
 	}

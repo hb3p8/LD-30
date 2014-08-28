@@ -8,9 +8,9 @@ public class HeavyFighterScript : MonoBehaviour {
 	public GameObject shot;
 	
 	private float nextFire;
-	private float fireRate = 0.25f;
+	private float fireRate = 0.18f;
 	
-	private float laserShotVelocity = 27.0f;
+	private float laserShotVelocity = 30.0f;
 	
 	private int HP = 1000;
 	

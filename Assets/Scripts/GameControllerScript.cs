@@ -8,8 +8,8 @@ public class GameControllerScript : MonoBehaviour {
 	// Global variables
 	static public float Bottom = 10.0f;
 	static public float Up = 1000.0f;
-	static public float Left = 24.0f;
-	static public float Right = 106.0f;
+	static public float Left = 30.0f;
+	static public float Right = 100.0f;
 
 	static public Vector3 GlobalTarget;
 
@@ -24,8 +24,8 @@ public class GameControllerScript : MonoBehaviour {
 
 	// Global variables end
 
-	private int MaxLightFighters = 30;
-	private int MaxHeavyFighters = 3;
+	private int MaxLightFighters = 60;
+	private int MaxHeavyFighters = 4;
 
 	public GameObject AsteroidPrefab;
 	public GameObject PlanetPrefab;
@@ -35,7 +35,7 @@ public class GameControllerScript : MonoBehaviour {
 	public GameObject heavyFighterPrefab;
 
 	private float nextSpawn;	
-	private float spawnRate = 3.5f;
+	private float spawnRate = 1.2f;
 
 	private GameObject playerObject;
 	private GameObject cameraObject;
@@ -233,20 +233,20 @@ public class GameControllerScript : MonoBehaviour {
 				tempFighter = Instantiate(lightFighterPrefab, startPos,
 	                                           (Quaternion.AngleAxis(180.0f+randomAngle, new Vector3(0.0f,0.0f,1.0f))));
 				tempFighter.name = "LF_bib";
-				((Rigidbody2D)(((GameObject)tempFighter).GetComponent<Rigidbody2D>())).velocity = startVec*4.5f;
+				((Rigidbody2D)(((GameObject)tempFighter).GetComponent<Rigidbody2D>())).velocity = startVec*5.5f;
 				biboraLightFighters.Add((GameObject)tempFighter);
 
 				tempFighter = Instantiate(lightFighterPrefab, startPos - startVec + startVecPerp,
 	                                           (Quaternion.AngleAxis(180.0f+randomAngle, new Vector3(0.0f,0.0f,1.0f))));
 				tempFighter.name = "LF_bib";
-				((Rigidbody2D)(((GameObject)tempFighter).GetComponent<Rigidbody2D>())).velocity = startVec*4.5f;
+				((Rigidbody2D)(((GameObject)tempFighter).GetComponent<Rigidbody2D>())).velocity = startVec*5.5f;
 				biboraLightFighters.Add((GameObject)tempFighter);
 
 
 				tempFighter = Instantiate(lightFighterPrefab, startPos - startVec - startVecPerp,
 	                                           (Quaternion.AngleAxis(180.0f+randomAngle, new Vector3(0.0f,0.0f,1.0f))));
 				tempFighter.name = "LF_bib";
-				((Rigidbody2D)(((GameObject)tempFighter).GetComponent<Rigidbody2D>())).velocity = startVec*4.5f;
+				((Rigidbody2D)(((GameObject)tempFighter).GetComponent<Rigidbody2D>())).velocity = startVec*5.5f;
 				biboraLightFighters.Add((GameObject)tempFighter);
 			}
 
@@ -266,20 +266,20 @@ public class GameControllerScript : MonoBehaviour {
 				tempFighter = Instantiate(lightFighterPrefab, startPos,
 	                                           (Quaternion.AngleAxis(0.0f+randomAngle, new Vector3(0.0f,0.0f,1.0f))));
 				tempFighter.name = "LF_aza";
-				((Rigidbody2D)(((GameObject)tempFighter).GetComponent<Rigidbody2D>())).velocity = startVec*4.5f;
+				((Rigidbody2D)(((GameObject)tempFighter).GetComponent<Rigidbody2D>())).velocity = startVec*5.5f;
 				azamathLightFighters.Add((GameObject)tempFighter);
 
 				tempFighter = Instantiate(lightFighterPrefab, startPos - startVec + startVecPerp,
 	                                           (Quaternion.AngleAxis(0.0f+randomAngle, new Vector3(0.0f,0.0f,1.0f))));
 				tempFighter.name = "LF_aza";
-				((Rigidbody2D)(((GameObject)tempFighter).GetComponent<Rigidbody2D>())).velocity = startVec*4.5f;
+				((Rigidbody2D)(((GameObject)tempFighter).GetComponent<Rigidbody2D>())).velocity = startVec*5.5f;
 				azamathLightFighters.Add((GameObject)tempFighter);
 
 
 				tempFighter = Instantiate(lightFighterPrefab, startPos - startVec - startVecPerp,
 	                                           (Quaternion.AngleAxis(0.0f+randomAngle, new Vector3(0.0f,0.0f,1.0f))));
 				tempFighter.name = "LF_aza";
-				((Rigidbody2D)(((GameObject)tempFighter).GetComponent<Rigidbody2D>())).velocity = startVec*4.5f;
+				((Rigidbody2D)(((GameObject)tempFighter).GetComponent<Rigidbody2D>())).velocity = startVec*5.5f;
 				azamathLightFighters.Add((GameObject)tempFighter);
 			}
 		}

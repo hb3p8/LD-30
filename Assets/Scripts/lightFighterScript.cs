@@ -8,11 +8,11 @@ public class lightFighterScript : MonoBehaviour {
 	public GameObject shot;
 
 	private float nextFire;
-	private float fireRate = 1.7f;
+	private float fireRate = 1.1f;
 
-	private float laserShotVelocity = 27.0f;
+	private float laserShotVelocity = 30.0f;
 
-	private int HP = 16;
+	private int HP = 9;
 
 	private bool isDestroyed = false;
 
@@ -86,8 +86,13 @@ public class lightFighterScript : MonoBehaviour {
 		{	
 			Vector3 pos = transform.position;
 			pos.z -= 1.0f;		
-			Instantiate(explosion, pos, transform.rotation);
+			
 			isDestroyed = true;
+
+			if( (rigidbody2D.position - new Vector2(Camera.main.transform.position.x , Camera.main.transform.position.y)).magnitude < 30.0f )
+			{
+				Instantiate(explosion, pos, transform.rotation);
+			}
 		}
 	}
 

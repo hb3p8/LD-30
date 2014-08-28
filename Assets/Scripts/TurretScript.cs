@@ -7,7 +7,7 @@ public class TurretScript : MonoBehaviour {
 	private float nextFire;	
 	public GameObject Shot;
 	private float laserShotVelocity = 20.0f;
-	private float fireRate = 1.5f;
+	private float fireRate = 1.2f;
 
 	private GameObject player;
 
