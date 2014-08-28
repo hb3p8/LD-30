@@ -8,7 +8,7 @@ public class lightFighterScript : MonoBehaviour {
 	public GameObject shot;
 
 	private float nextFire;
-	private float fireRate = 1.1f;
+	private float fireRate = 1.25f;
 
 	private float laserShotVelocity = 30.0f;
 

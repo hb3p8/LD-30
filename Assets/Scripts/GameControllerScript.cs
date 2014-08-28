@@ -24,7 +24,7 @@ public class GameControllerScript : MonoBehaviour {
 
 	// Global variables end
 
-	private int MaxLightFighters = 60;
+	private int MaxLightFighters = 51;
 	private int MaxHeavyFighters = 4;
 
 	public GameObject AsteroidPrefab;
@@ -35,7 +35,7 @@ public class GameControllerScript : MonoBehaviour {
 	public GameObject heavyFighterPrefab;
 
 	private float nextSpawn;	
-	private float spawnRate = 1.2f;
+	private float spawnRate = 1.35f;
 
 	private GameObject playerObject;
 	private GameObject cameraObject;
@@ -224,7 +224,7 @@ public class GameControllerScript : MonoBehaviour {
 				Vector3 startPos = new Vector3( 0.0f , Random.Range(300.0f, 520.0f) , -2.0f);
 
 
-				float randomAngle = Random.Range(-30.0f, 30.0f);	
+				float randomAngle = Random.Range(-50.0f, 50.0f);	
 				Quaternion rotQuat = Quaternion.AngleAxis(randomAngle, new Vector3(0.0f,0.0f,1.0f));
 
 				startVec = rotQuat * startVec;
@@ -257,7 +257,7 @@ public class GameControllerScript : MonoBehaviour {
 				Vector3 startPos = new Vector3( 130.0f , Random.Range(300.0f, 520.0f) , -2.0f);
 
 
-				float randomAngle = Random.Range(-30.0f, 30.0f);	
+				float randomAngle = Random.Range(-50.0f, 50.0f);	
 				Quaternion rotQuat = Quaternion.AngleAxis(randomAngle, new Vector3(0.0f,0.0f,1.0f));
 
 				startVec = rotQuat * startVec;
