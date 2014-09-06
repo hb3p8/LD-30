@@ -56,6 +56,9 @@ public class PlayerScript : MonoBehaviour {
 	public GameObject Explosion;
 
 	public GameObject Engine;
+
+	public Joystick JoysticLeft;
+	public Joystick JoysticRight;
 	// Use this for initialization
 
 	// Audio 
@@ -105,7 +108,6 @@ public class PlayerScript : MonoBehaviour {
 
 		explosion = GetComponents<AudioSource> ()[0];
 		collisionHit = GetComponents<AudioSource> ()[1];
-
 	}
 	
 	// Update is called once per frame
@@ -143,32 +145,41 @@ public class PlayerScript : MonoBehaviour {
 		Vector3 mousePos = ray.origin;
 		Vector3 currentPos = playerTurret.transform.position;//new Vector3 (Screen.width / 2, Screen.height / 2);
 
+#if UNITY_ANDROID
+		Vector3 rightJoystickPos = Camera.main.transform.rotation * (new Vector3( JoysticRight.position.x, JoysticRight.position.y ,0.0f));
+		float x = -rightJoystickPos.x;
+		float y = -rightJoystickPos.y;
+#else
 		float x = currentPos.x - mousePos.x;
 		float y = currentPos.y - mousePos.y;
+#endif   
+
 		float radians = Mathf.Atan2 (y, x);
 		radians += Mathf.PI / 2f;
 		
 		playerTurret.transform.rotation = Quaternion.AngleAxis (radians / Mathf.PI * 180f, new Vector3 (0f, 0f, 1f));
 
-
-
+#if UNITY_ANDROID
+		if ( ( Math.Abs(x) > 0.1f || Math.Abs(y) > 0.1f ) && Time.time > nextFire) 
+#else
 		if (Input.GetButton("Fire1") && Time.time > nextFire) 
+#endif   
 		{
 			nextFire = Time.time + fireRate;
-
+			
 			Vector3 shotSpawnPos = playerTurret.transform.position;
 			shotSpawnPos.z += 0.05f;
-
+			
 			UnityEngine.Object temp_shot = Instantiate(Shot, shotSpawnPos,
 			                                           playerTurret.transform.rotation * (Quaternion.AngleAxis(90.0f, new Vector3(0.0f,0.0f,1.0f))));
-
+			
 			Vector3 turretDirection3 = playerTurret.transform.rotation * Vector3.up;
 			Vector2 turretDirection2 = new Vector2(turretDirection3.x, turretDirection3.y);
-
+			
 			((GameObject)temp_shot).rigidbody2D.velocity = /*rigidbody2D.velocity + */laserShotVelocity*turretDirection2;
 			((GameObject)temp_shot).name = "Bul_destr";
 		}
-
+		
 	}
 	
 	void FixedUpdate()
@@ -182,15 +193,36 @@ public class PlayerScript : MonoBehaviour {
 
 		rigidbody2D.velocity += GravityVec;
 
+
+#if UNITY_ANDROID
+		// ver1
+		//float moveHorizontal = JoysticLeft.position.x;
+		//float moveVertical = JoysticLeft.position.y;
+
+		// ver2
+		//
+		Vector2 playerDir = Camera.main.transform.rotation*rigidbody2D.transform.rotation * new Vector2( 0.0f, 1.0f );
+		Vector2 playerDirPerp = new Vector2( -playerDir.y, playerDir.x );
+		Vector2 joystickDir = new Vector2( JoysticLeft.position.x, JoysticLeft.position.y );
+
+		float moveHorizontal = -Vector2.Dot( playerDirPerp, joystickDir );
+		float moveVertical = Vector2.Dot( playerDir, joystickDir );
+
+		if( moveVertical < -0.1f)
+			moveHorizontal = Math.Sign( moveHorizontal );
+
+
+
+#else
 		float moveHorizontal = Input.GetAxis ("Horizontal");
 		float moveVertical = Input.GetAxis ("Vertical");
-
+#endif   
 		if (moveVertical < 0.0f)
 		{
 			moveVertical  = 0.0f;
 		}
 
-		if( moveVertical > 0.0f)
+		if( moveVertical > 0.05f)
 		{
 			//for( int i = 0; i < engines.Count ; i++ )
 			//{
@@ -227,7 +259,7 @@ public class PlayerScript : MonoBehaviour {
 
 		}
 
-		// Check AngukarVelocity
+		// Check AngularVelocity
 		if( Mathf.Abs(rigidbody2D.angularVelocity) > MaxAngularVelocity )
 		{
 			//rigidbody2D.angularVelocity = lastAngularVelocity;

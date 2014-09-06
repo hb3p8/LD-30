@@ -11,8 +11,8 @@ public class AsteroidScript : MonoBehaviour {
 	public int Steps = 20;
 	public float Roughness = 0.7f;
 	public GameObject Turret;
-	public bool placeTurret = false; 
-	
+	public bool placeTurret = false;
+
 	// This first list contains every vertex of the mesh that we are going to render
 	private List<Vector3> terrainVertices = new List<Vector3>();
 	
@@ -36,6 +36,12 @@ public class AsteroidScript : MonoBehaviour {
 	}
 	
 	void Start () {
+
+		#if UNITY_ANDROID
+		
+		Steps = 10;
+		
+		#endif
 		
 		List<float> heights = new List<float>();
 		

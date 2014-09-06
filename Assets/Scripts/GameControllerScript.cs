@@ -24,9 +24,18 @@ public class GameControllerScript : MonoBehaviour {
 
 	// Global variables end
 
+#if UNITY_ANDROID
+
+	private int MaxLightFighters = 30;
+	private int MaxHeavyFighters = 3;
+
+#else
+
 	private int MaxLightFighters = 51;
 	private int MaxHeavyFighters = 4;
 
+#endif   
+	
 	public GameObject AsteroidPrefab;
 	public GameObject PlanetPrefab;
 	public GameObject TurretPrefab;
